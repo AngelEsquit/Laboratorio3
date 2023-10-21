@@ -30,13 +30,16 @@ public class Driver {
         int cantidad_disponible = 0;
         int cantidad_vendidos = 0;
         String estado = "";
-        int precio = 0;
+        float precio = 0;
         int mililitros = 0;
         String tipo = "";
         int gramos = 0;
         String sabor = "";
         String tamanio = "";
         String categoria = "";
+        float comision = 0;
+        float porcentaje = 0;
+        
 
         // Variables para guardar los datos en CSV
         Producto producto;
@@ -125,10 +128,10 @@ public class Driver {
             System.err.println("Error al leer el archivo CSV: " + e.getMessage());
         }
 
-        while (salir) {
+        while (salir) { // Ciclo principal del programa
             printMenu();
 
-            try {
+            try { // Try para proteger el menú
                 opcion = scanner.nextInt();
                 scanner.nextLine();
             } catch (InputMismatchException e) {
@@ -137,15 +140,15 @@ public class Driver {
                 scanner.nextLine();
             }
 
-            switch (opcion) {
-                case 1:
+            switch (opcion) { // Opciones del menú
+                case 1: // Buscar un producto
                     break;
-                case 2:
+                case 2: // Lista de productos
                     break;
-                case 3:
+                case 3: // Ventas
                     System.out.println("// Lógica para la opción 3");
                     break;
-                case 4:
+                case 4: // Informe
                     System.out.println("// Lógica para la opción 4");
                     break;
                 case 5:
@@ -171,10 +174,10 @@ public class Driver {
         System.out.println("                Menú");
         System.out.println("**************************************");
         System.out.println("Ingrese la opción que desee:");
-        System.out.println("1: Mostrar lista de jugadores inscritos");
-        System.out.println("2: Mostrar los mejores líberos");
-        System.out.println("3: Mostrar la cantidad de pasadores con más de un 80% de efectividad");
-        System.out.println("4: Inscribir un nuevo jugador");
+        System.out.println("1: Buscar un producto");
+        System.out.println("2: Lista de productos");
+        System.out.println("3: Ventas");
+        System.out.println("4: Ver informe");
         System.out.println("5: Salir");
         System.out.println("");
     }
