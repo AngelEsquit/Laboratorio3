@@ -3,7 +3,7 @@ public class Snack extends Producto {
     private String sabor;
     private String tamanio;
     
-    public Snack(int id, String nombre, int cantidad_disponible, int cantidad_vendidos, String estado, int precio,
+    public Snack(int id, String nombre, int cantidad_disponible, int cantidad_vendidos, String estado, float precio,
             int gramos, String sabor, String tamanio) {
         super(id, nombre, cantidad_disponible, cantidad_vendidos, estado, precio);
         this.gramos = gramos;
