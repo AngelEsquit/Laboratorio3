@@ -4,9 +4,9 @@ public class Producto {
     protected int cantidad_disponible;
     protected int cantidad_vendidos;
     protected String estado;
-    protected int precio;
+    protected float precio;
     
-    public Producto(int id, String nombre, int cantidad_disponible, int cantidad_vendidos, String estado, int precio) {
+    public Producto(int id, String nombre, int cantidad_disponible, int cantidad_vendidos, String estado, float precio) {
         this.id = id;
         this.nombre = nombre;
         this.cantidad_disponible = cantidad_disponible;
@@ -55,7 +55,7 @@ public class Producto {
         this.estado = estado;
     }
 
-    public int getPrecio() {
+    public float getPrecio() {
         return precio;
     }
 
