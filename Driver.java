@@ -1,3 +1,9 @@
+/*
+Universidad del Valle de Guatemala
+Angel Esteban Esquit Hernández - 23221
+Laboratorio 3
+*/
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,35 +24,34 @@ public class Driver {
         int opcion = 0;
         int conteo = -1;
 
-        //Creación de variables para guardar los atributos de los jugadores
+        //Creación de variables para guardar los atributos de los productos
+        int id = 0;
         String nombre = "";
-        String posicion = "";
-        String pais = "";
-        int errores = 0;
-        int aces = 0;
-        int total_servicios = 0;
-        int ataques = 0;
-        int bloqueos_efectivos = 0;
-        int bloqueos_fallidos = 0;
-        int pases = 0;
-        int fintas = 0;
-        int recibos = 0;
-        float efectividad = 1;
+        int cantidad_disponible = 0;
+        int cantidad_vendidos = 0;
+        String estado = "";
+        int precio = 0;
+        int mililitros = 0;
+        String tipo = "";
+        int gramos = 0;
+        String sabor = "";
+        String tamanio = "";
+        String categoria = "";
 
         // Variables para guardar los datos en CSV
-        Jugador jugador;
-        Libero libero;
-        Opuesto opuesto;
-        Auxiliar auxiliar;
-        Pasador pasador;
+        Producto producto;
+        Bebida bebida;
+        Snack snack;
+        Dulce Dulce;
 
         // Variable para saltar la primera fila de encabezados
         boolean primera_fila = true;
 
+        String csvFilePath = "Productos.csv"; // Establecer el archivo CSV
         try (BufferedReader csvReader = new BufferedReader(new FileReader(csvFilePath))) { // Lector de CSV
             String line;
             while ((line = csvReader.readLine()) != null) {
-                if (primera_fila) {
+                if (primera_fila) { // Saltar la primera fila de encabezados
                     primera_fila = false;
                     continue;
                 }
@@ -57,44 +62,41 @@ public class Driver {
 
                     if (!datos.equals("-") || datos.equals("0")) { // Identificación y separación de los datos por columna
                         switch (conteo) {
-                            case 0: // Nombre
+                            case 0: // ID
+                                id = Integer.parseInt(datos);
+                                break;
+                            case 1: // Nombre
                                 nombre = datos;
                                 break;
-                            case 1: // Posicion
-                                posicion = datos;
+                            case 2: // Cantidad disponible
+                                cantidad_disponible = Integer.parseInt(datos);
                                 break;
-                            case 2: // Pais
-                                pais = datos;
+                            case 3: // Cantidad vendidos
+                                cantidad_vendidos = Integer.parseInt(datos);
                                 break;
-                            case 3: // Errores
-                                errores = Integer.parseInt(datos);
+                            case 4: // Estado
+                                estado = datos;
                                 break;
-                            case 4: // Aces
-                                aces = Integer.parseInt(datos);
+                            case 5: // Precio
+                                precio = Integer.parseInt(datos);
                                 break;
-                            case 5: // Total servicios
-                                total_servicios = Integer.parseInt(datos);
+                            case 6: // Categoría
+                                categoria = datos;
                                 break;
-                            case 6: // Ataques
-                                ataques = Integer.parseInt(datos);
+                            case 7: // Mililitros
+                                mililitros = Integer.parseInt(datos);
                                 break;
-                            case 7: // Bloqueos efectivos
-                                bloqueos_efectivos = Integer.parseInt(datos);
+                            case 8: // Tipo
+                                tipo = datos;
                                 break;
-                            case 8: // Bloqueos fallidos
-                                bloqueos_fallidos = Integer.parseInt(datos);
+                            case 9: // Gramos
+                                gramos = Integer.parseInt(datos);
                                 break;
-                            case 9: // Pases
-                                pases = Integer.parseInt(datos);
+                            case 10: // Sabor
+                                sabor = datos;
                                 break;
-                            case 10: // Fintas
-                                fintas = Integer.parseInt(datos);
-                                break;
-                            case 11: // Recibos
-                                recibos = Integer.parseInt(datos);
-                                break;
-                            case 12: // Efectividad
-                                efectividad = Integer.parseInt(datos);
+                            case 11: // Tamanio
+                                tamanio = datos;
                                 break;
                             default:
                                 break;
@@ -102,27 +104,20 @@ public class Driver {
                     }
                 }
 
-                switch (posicion.toLowerCase()) { // Crear a los jugadores leidos en el CSV
-                    case "auxiliar":
-                        efectividad = ((((ataques + bloqueos_efectivos - bloqueos_fallidos - errores) * 100) / (ataques + bloqueos_efectivos + bloqueos_fallidos + errores)) + (aces * 100) / total_servicios);
-                        jugadores.add(new Auxiliar(nombre, pais, errores, aces, total_servicios, efectividad, ataques, bloqueos_efectivos, bloqueos_fallidos));
+                switch (categoria.toLowerCase()) { // Crear a los productos leidos en el CSV
+                    case "Bebida":
+                        productos.add(new Bebida(id, nombre, cantidad_disponible, cantidad_vendidos, estado, precio, mililitros, tipo));
                         break;
-                    case "pasador":
-                        efectividad = ((((pases + fintas - errores) * 100) / (pases + fintas + errores)) + (aces * 100) / total_servicios);
-                        jugadores.add(new Pasador(nombre, pais, errores, aces, total_servicios, efectividad, pases, fintas));
+                    case "Snack":
+                        productos.add(new Snack(id, nombre, cantidad_disponible, cantidad_vendidos, estado, precio, gramos, sabor, tamanio));
                         break;
-                    case "libero":
-                        efectividad = ((((recibos - errores) * 100) / (recibos + errores)) + (aces * 100) / total_servicios);
-                        jugadores.add(new Libero(nombre, pais, errores, aces, total_servicios, efectividad, recibos));
-                        break;
-                    case "opuesto":
-                        efectividad = ((((ataques + bloqueos_efectivos - bloqueos_fallidos - errores) * 100) / (ataques + bloqueos_efectivos + bloqueos_fallidos + errores)) + (aces * 100) / total_servicios);
-                        jugadores.add(new Opuesto(nombre, pais, errores, aces, total_servicios, efectividad, ataques, bloqueos_efectivos, bloqueos_fallidos));
+                    case "Dulce":
+                        productos.add(new Dulce(id, nombre, cantidad_disponible, cantidad_vendidos, estado, precio, sabor, tamanio));
                         break;
                 }
 
-                Comparator<Jugador> comparadorEfectividad = Comparator.comparing(Jugador::getEfectividad);
-                Collections.sort(jugadores, Collections.reverseOrder(comparadorEfectividad)); // Ordenar la lista de jugadores por efectividad
+                Comparator<Producto> comparadorEfectividad = Comparator.comparing(Producto::getId);
+                Collections.sort(productos, Collections.reverseOrder(comparadorEfectividad)); // Ordenar la lista de productos por ID
                 System.out.println(); // Salto de línea para cada fila
                 conteo = -1;
             }
