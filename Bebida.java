@@ -23,5 +23,12 @@ public class Bebida extends Producto {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
-    }    
+    }
+    
+    @Override
+    public String toString() {
+        return id + ": " + nombre + " - Cantidad disponible: " + cantidad_disponible
+                + " - Cantidad vendidos: " + cantidad_vendidos + " - Estado: " + estado + " - Precio: " + precio
+                + " - Mililitros: " + mililitros + " - Tipo: " + tipo;
+    }
 }
