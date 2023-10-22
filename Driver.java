@@ -63,43 +63,55 @@ public class Driver {
                 for (String datos : data) {
                     conteo += 1;
 
-                    if (!datos.equals("-") || datos.equals("0")) { // Identificación y separación de los datos por columna
+                    if (!datos.equals("-") && !datos.isEmpty()) { // Identificación y separación de los datos por columna
                         switch (conteo) {
                             case 0: // ID
                                 id = Integer.parseInt(datos);
+                                System.out.println(id);
                                 break;
                             case 1: // Nombre
                                 nombre = datos;
+                                System.out.println(nombre);
                                 break;
                             case 2: // Cantidad disponible
                                 cantidad_disponible = Integer.parseInt(datos);
+                                System.out.println(cantidad_disponible);
                                 break;
                             case 3: // Cantidad vendidos
                                 cantidad_vendidos = Integer.parseInt(datos);
+                                System.out.println(cantidad_vendidos);
                                 break;
                             case 4: // Estado
                                 estado = datos;
+                                System.out.println(estado);
                                 break;
                             case 5: // Precio
-                                precio = Integer.parseInt(datos);
+                                precio = Float.parseFloat(datos);
+                                System.out.println(precio);
                                 break;
                             case 6: // Categoría
                                 categoria = datos;
+                                System.out.println(categoria);
                                 break;
                             case 7: // Mililitros
                                 mililitros = Integer.parseInt(datos);
+                                System.out.println(mililitros);
                                 break;
                             case 8: // Tipo
                                 tipo = datos;
+                                System.out.println(tipo);
                                 break;
                             case 9: // Gramos
                                 gramos = Integer.parseInt(datos);
+                                System.out.println(gramos);
                                 break;
                             case 10: // Sabor
                                 sabor = datos;
+                                System.out.println(sabor);
                                 break;
                             case 11: // Tamanio
                                 tamanio = datos;
+                                System.out.println(tamanio);
                                 break;
                             default:
                                 break;
@@ -108,22 +120,22 @@ public class Driver {
                 }
 
                 switch (categoria.toLowerCase()) { // Crear a los productos leidos en el CSV
-                    case "Bebida":
+                    case "bebida":
                         id = productos.size();
                         productos.add(new Bebida(id, nombre, cantidad_disponible, cantidad_vendidos, estado, precio, mililitros, tipo));
                         break;
-                    case "Snack":
+                    case "snack":
                         id = productos.size();
                         productos.add(new Snack(id, nombre, cantidad_disponible, cantidad_vendidos, estado, precio, gramos, sabor, tamanio));
                         break;
-                    case "Dulce":
+                    case "dulce":
                         id = productos.size();
                         productos.add(new Dulce(id, nombre, cantidad_disponible, cantidad_vendidos, estado, precio, sabor, tamanio));
                         break;
                 }
 
-                Comparator<Producto> comparadorEfectividad = Comparator.comparing(Producto::getId);
-                Collections.sort(productos, Collections.reverseOrder(comparadorEfectividad)); // Ordenar la lista de productos por ID
+                Comparator<Producto> comparadorId = Comparator.comparing(Producto::getId);
+                Collections.sort(productos, comparadorId); // Ordenar la lista de productos por ID
                 System.out.println(); // Salto de línea para cada fila
                 conteo = -1;
             }
@@ -145,11 +157,19 @@ public class Driver {
 
             switch (opcion) { // Opciones del menú
                 case 1: // Buscar un producto
+                    System.out.println("");
                     buscarProducto(scanner, productos);
                     break;
                 case 2: // Lista de productos
+                    System.out.println("");
+                    categoriaLista(scanner, productos);
                     break;
                 case 3: // Ventas
+                    for (Producto producto2 : productos) {
+                        if (producto2 instanceof Bebida) {
+                            System.out.println(producto2.toString());
+                        }
+                    }
                     System.out.println("// Lógica para la opción 3");
                     break;
                 case 4: // Informe
@@ -194,23 +214,100 @@ public class Driver {
         try {
             id = scanner.nextInt();
             scanner.nextLine();
-
-            if (id <= productos.size() && id > 0) {
-                System.out.println(productos.get(id).toString());
-            }
-
-            else {
-                System.out.println("");
-                System.out.println("El ID ingresado no existe");
-            }
+            System.out.println(productos.get(id).toString());
         }
 
         catch (InputMismatchException e) {
             System.out.println("");
             System.out.println("Ingrese un número.");
-            scanner.nextLine();
+        }
+
+        catch (IndexOutOfBoundsException e) {
+            System.out.println("");
+            System.out.println("El ID ingresado no existe");
         }
 
         System.out.println("");
+    }
+
+    public static void categoriaLista(Scanner scanner, ArrayList<Producto> productos) {
+        int opcion = 0;
+
+        System.out.println("");
+        System.out.println("Ingrese la opción que desee:");
+        System.out.println("1: Todos los productos");
+        System.out.println("2: Bebidas");
+        System.out.println("3: Snacks");
+        System.out.println("4: Dulces");
+        System.out.println("");
+
+        try { // Try para proteger el menú
+            opcion = scanner.nextInt();
+            scanner.nextLine();
+            
+        } catch (InputMismatchException e) {
+            System.out.println("");
+            System.out.println("Ingrese un número.");
+            scanner.nextLine();
+        }
+
+        switch (opcion) {
+            case 1:
+                System.out.println(""); 
+                System.out.println("Bebidas");
+                for (Producto producto : productos) {
+                    if (producto instanceof Bebida) {
+                        System.out.println(producto.toString());
+                    }
+                }
+                
+                System.out.println("");
+                System.out.println("Snacks");
+                for (Producto producto : productos) {
+                    if (producto instanceof Snack) {
+                        System.out.println(producto.toString());
+                    }
+                }
+                
+                System.out.println("");
+                System.out.println("Dulces");
+                for (Producto producto : productos) {
+                    if (producto instanceof Dulce) {
+                        System.out.println(producto.toString());
+                    }
+                }
+                break;
+            case 2:
+                System.out.println("");
+                System.out.println("Bebidas");
+                for (Producto producto : productos) {
+                    if (producto instanceof Bebida) {
+                        System.out.println(producto.toString());
+                    }
+                }
+                break;
+            case 3:
+                System.out.println("");
+                System.out.println("Snacks");
+                for (Producto producto : productos) {
+                    if (producto instanceof Snack) {
+                        System.out.println(producto.toString());
+                    }
+                }
+                break;
+            case 4:
+                System.out.println("");
+                System.out.println("Dulces");
+                for (Producto producto : productos) {
+                    if (producto instanceof Dulce) {
+                        System.out.println(producto.toString());
+                    }
+                }
+                break;
+            default:
+                System.out.println("");
+                System.out.println("Número inválido. Intente nuevamente.");
+                break;
+        }
     }
 }
