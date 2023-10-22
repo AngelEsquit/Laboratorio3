@@ -24,4 +24,11 @@ public class Dulce extends Producto {
     public void setTamanio(String tamanio) {
         this.tamanio = tamanio;
     }
+
+    @Override
+    public String toString() {
+        return id + ": " + nombre + " - Cantidad disponible: " + cantidad_disponible
+                + " - Cantidad vendidos: " + cantidad_vendidos + " - Estado: " + estado + " - Precio: " + precio
+                + " - Sabor: " + sabor + " - Tamaño: " + tamanio;
+    }
 }
