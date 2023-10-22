@@ -1,1 +1,11 @@
 id_producto;nombre;cantidad_disponible;cantidad_vendidos;estado;precio;categoria;ml;tipo;gramos;sabor;tamanio
+0;Refresco de Cola;100;50;Disponible;1.50;Bebida;500;Regular;-;-;-
+1;Agua Mineral;200;75;Disponible;0.75;Bebida;500;Mineral;-;-;-
+2;Papas Fritas;120;60;Disponible;1.25;Snack;-;-;50;Salado;Pequeño
+3;Chocolate;150;70;Disponible;1.00;Dulce;-;-;-;Chocolate;Regular
+4;Cerveza;50;25;Disponible;2.00;Bebida;330;Alcoholica;-;-;-
+5;Galletas;80;40;Disponible;1.20;Snack;-;-;75;Vainilla;Mediano
+6;Chicle;300;120;Disponible;0.25;Dulce;-;-;-;Fresa;Pequeño
+7;Té Helado;90;45;Disponible;1.75;Bebida;350;Frutas;-;-;-
+8;Nueces;60;30;Disponible;2.50;Snack;-;-;45;Nuez;Pequeño
+9;Paleta de Caramelo;200;80;Disponible;0.50;Dulce;-;-;-;Caramelo;Pequeño
