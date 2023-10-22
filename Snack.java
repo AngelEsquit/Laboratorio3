@@ -34,4 +34,11 @@ public class Snack extends Producto {
     public void setTamanio(String tamanio) {
         this.tamanio = tamanio;
     }
+
+    @Override
+    public String toString() {
+        return id + ": " + nombre + " - Cantidad disponible: " + cantidad_disponible
+                + " - Cantidad vendidos: " + cantidad_vendidos + " - Estado: " + estado + " - Precio: " + precio
+                + " - Gramos: " + gramos + " - Sabor: " + sabor + " - Tamaño: " + tamanio;
+    }
 }
