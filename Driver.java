@@ -23,6 +23,7 @@ public class Driver {
         boolean salir = true;
         int opcion = 0;
         int conteo = -1;
+        int cantidad = 0;
 
         //Creación de variables para guardar los atributos de los productos
         int id = 0;
@@ -38,14 +39,11 @@ public class Driver {
         String tamanio = "";
         String categoria = "";
         float comision = 0;
+        float subtotal = 0;
+        float total = 0;
         float porcentaje = 0;
-        
-
-        // Variables para guardar los datos en CSV
+        float porcentajeComision = 20/100;
         Producto producto;
-        Bebida bebida;
-        Snack snack;
-        Dulce Dulce;
 
         // Variable para saltar la primera fila de encabezados
         boolean primera_fila = true;
@@ -67,51 +65,39 @@ public class Driver {
                         switch (conteo) {
                             case 0: // ID
                                 id = Integer.parseInt(datos);
-                                System.out.println(id);
                                 break;
                             case 1: // Nombre
                                 nombre = datos;
-                                System.out.println(nombre);
                                 break;
                             case 2: // Cantidad disponible
                                 cantidad_disponible = Integer.parseInt(datos);
-                                System.out.println(cantidad_disponible);
                                 break;
                             case 3: // Cantidad vendidos
                                 cantidad_vendidos = Integer.parseInt(datos);
-                                System.out.println(cantidad_vendidos);
                                 break;
                             case 4: // Estado
                                 estado = datos;
-                                System.out.println(estado);
                                 break;
                             case 5: // Precio
                                 precio = Float.parseFloat(datos);
-                                System.out.println(precio);
                                 break;
                             case 6: // Categoría
                                 categoria = datos;
-                                System.out.println(categoria);
                                 break;
                             case 7: // Mililitros
                                 mililitros = Integer.parseInt(datos);
-                                System.out.println(mililitros);
                                 break;
                             case 8: // Tipo
                                 tipo = datos;
-                                System.out.println(tipo);
                                 break;
                             case 9: // Gramos
                                 gramos = Integer.parseInt(datos);
-                                System.out.println(gramos);
                                 break;
                             case 10: // Sabor
                                 sabor = datos;
-                                System.out.println(sabor);
                                 break;
                             case 11: // Tamanio
                                 tamanio = datos;
-                                System.out.println(tamanio);
                                 break;
                             default:
                                 break;
@@ -165,17 +151,35 @@ public class Driver {
                     categoriaLista(scanner, productos);
                     break;
                 case 3: // Ventas
-                    for (Producto producto2 : productos) {
-                        if (producto2 instanceof Bebida) {
-                            System.out.println(producto2.toString());
-                        }
+                    ventasTienda(productos);
+                    if (comision == 0) {
+                        System.out.println("No se ha vendido ningún dulce, por lo tanto la comisión representa un 0%.");
                     }
-                    System.out.println("// Lógica para la opción 3");
+
+                    else {
+                        porcentaje = comision / total;
+                        System.out.println("La comisión de los dulces representa un " + porcentaje * 100 + "% de las ventas totales.");
+                    }
                     break;
                 case 4: // Informe
-                    System.out.println("// Lógica para la opción 4");
+                    informe(productos, total, comision);
                     break;
-                case 5: // Salir
+                case 5: // Registrar venta
+                    cantidad = preguntarCantidad(scanner);
+                    producto = seleccionarProducto(scanner, productos);
+
+                    if (producto instanceof Dulce) {
+                        subtotal = venta(scanner, productos, producto.getId(), cantidad);
+                        total += subtotal;
+                        comision = subtotal * porcentajeComision;
+                    }
+
+                    else {
+                        venta(scanner, productos, producto.getId(), cantidad);
+                        total += subtotal;
+                    }
+                    break;
+                case 6: // Salir
                     salir = false;
                     System.out.println("Hasta pronto :)");
                     break;
@@ -202,7 +206,8 @@ public class Driver {
         System.out.println("2: Lista de productos");
         System.out.println("3: Ventas");
         System.out.println("4: Ver informe");
-        System.out.println("5: Salir");
+        System.out.println("5: Registrar venta");
+        System.out.println("6: Salir");
         System.out.println("");
     }
 
@@ -309,5 +314,222 @@ public class Driver {
                 System.out.println("Número inválido. Intente nuevamente.");
                 break;
         }
+    }
+
+    public static void buscarProductoVenta(Scanner scanner, ArrayList<Producto> productos) {
+        int id = -1;
+        int cantidad = 0;
+        System.out.println("");
+        System.out.println("Ingrese el ID del producto que desee buscar");
+
+        try {
+            id = scanner.nextInt();
+            scanner.nextLine();
+
+            cantidad = scanner.nextInt();
+            scanner.nextLine();
+
+            System.out.println(productos.get(id).toString());
+        }
+
+        catch (InputMismatchException e) {
+            System.out.println("");
+            System.out.println("Ingrese un número.");
+        }
+
+        catch (IndexOutOfBoundsException e) {
+            System.out.println("");
+            System.out.println("El ID ingresado no existe");
+        }
+
+        System.out.println("");
+    }
+
+    public static float venta(Scanner scanner, ArrayList<Producto> productos, int id, int cantidad) {
+        float subtotal = 0;
+        int opcion = 0;
+
+        if (productos.get(id).getCantidad_disponible() >= cantidad) {
+            productos.get(id).setCantidad_disponible(productos.get(id).getCantidad_disponible() - cantidad);
+            registrarVendidos(productos, id, cantidad);
+            verificarEstado(productos, id);
+            subtotal = calcularSubtotal(productos, id, cantidad);
+        }
+
+        else {
+            System.out.println("La cantidad solicitada de este producto supera la disponibilidad");
+            System.out.println("De este producto solo se pueden vender: " + productos.get(id).getCantidad_disponible());
+
+            System.out.println("¿Desea comprar la máxima cantidad disponible?");
+            System.out.println("1: Sí");
+            System.out.println("2: No");
+
+            try { // Try para proteger el menú
+                opcion = scanner.nextInt();
+                scanner.nextLine();
+            } catch (InputMismatchException e) {
+                System.out.println("");
+                System.out.println("Ingrese un número.");
+                scanner.nextLine();
+            }
+
+            switch (opcion) { // Opciones del menú
+                case 1: // Sí
+                    registrarVendidos(productos, id, productos.get(id).getCantidad_disponible());
+                    subtotal = calcularSubtotal(productos, id, productos.get(id).getCantidad_disponible());
+                    productos.get(id).setCantidad_disponible(0);
+                    verificarEstado(productos, id);
+                    break;
+                case 2: // No
+                    break;
+                default:
+                    System.out.println("");
+                    System.out.println("Número inválido. Intente nuevamente.");
+                    break;
+            }
+        }
+
+        return subtotal;
+    }
+
+    public static void verificarEstado(ArrayList<Producto> productos, int id) {
+        if (productos.get(id).getCantidad_disponible() == 0) {
+            productos.get(id).setEstado("No disponible");
+        }
+    }
+
+    public static void registrarVendidos(ArrayList<Producto> productos, int id, int cantidad) {
+        productos.get(id).setCantidad_vendidos(productos.get(id).getCantidad_vendidos() + cantidad);
+    }
+
+    public static float calcularSubtotal(ArrayList<Producto> productos, int id, int cantidad) {
+        float subtotal = productos.get(id).getPrecio() * cantidad;
+
+        return subtotal;
+    }
+
+    public static int preguntarCantidad(Scanner scanner) {
+        int cantidad = 0;
+        System.out.println("");
+        System.out.println("Ingrese la cantidad de productos que desea");
+        System.out.println("");
+
+        try {
+            cantidad = scanner.nextInt();
+            scanner.nextLine();
+        }
+
+        catch (InputMismatchException e) {
+            System.out.println("");
+            System.out.println("Ingrese un número.");
+        }
+
+        return cantidad;
+    }
+
+    public static Producto seleccionarProducto(Scanner scanner, ArrayList<Producto> productos) {
+        int id = 0;
+        Producto producto = null;
+        System.out.println("");
+        System.out.println("Ingrese la ID del producto");
+        System.out.println("");
+
+        try {
+            id = scanner.nextInt();
+            scanner.nextLine();
+            producto = productos.get(id);
+        }
+
+        catch (InputMismatchException e) {
+            System.out.println("");
+            System.out.println("Ingrese un número.");
+        }
+
+        catch (IndexOutOfBoundsException e) {
+            System.out.println("");
+            System.out.println("El ID ingresado no existe");
+        }
+
+        return producto;
+    }
+
+    public static void ventasTienda(ArrayList<Producto> productos) {
+        System.out.println("");
+        for (Producto producto : productos) {
+            System.out.println(producto.getId() + ": " + producto.getNombre() + " - Cantidad vendida: " + producto.getCantidad_vendidos());
+        }
+        System.out.println("");
+    }
+
+    public static void informe(ArrayList<Producto> productos, float total, float comision) { 
+        int totalProductosBebidas = 0;
+        int totalProductosSnacks = 0;
+        int totalProductosDulces = 0;
+
+        for (Producto producto : productos) {
+            if (producto instanceof Bebida) {
+                totalProductosBebidas += producto.getCantidad_disponible() + producto.getCantidad_vendidos();
+            }
+        }
+        
+        for (Producto producto : productos) {
+            if (producto instanceof Snack) {
+                totalProductosSnacks += producto.getCantidad_disponible() + producto.getCantidad_vendidos();
+            }
+        }
+        
+        for (Producto producto : productos) {
+            if (producto instanceof Dulce) {
+                totalProductosDulces += producto.getCantidad_disponible() + producto.getCantidad_vendidos();
+            }
+        }
+
+        System.out.println("");
+        System.out.println("Listado de categorías con el total de productos");
+        System.out.println("");
+        System.out.println("Bebidas - " + totalProductosBebidas);
+        System.out.println("Snacks - " + totalProductosSnacks);
+        System.out.println("Dulces - " + totalProductosDulces);
+
+
+        System.out.println("");
+        System.out.println("");
+        System.out.println("Listado de productos por categoría"); 
+
+        System.out.println("");
+        System.out.println("Bebidas");
+        System.out.println("");
+        for (Producto producto : productos) {
+            if (producto instanceof Bebida) {
+                System.out.println(producto.getNombre());
+            }
+        }
+        
+        System.out.println("");
+        System.out.println("");
+        System.out.println("Snacks");
+        System.out.println("");
+        for (Producto producto : productos) {
+            if (producto instanceof Snack) {
+                System.out.println(producto.getNombre());
+            }
+        }
+        
+        System.out.println("");
+        System.out.println("");
+        System.out.println("Dulces");
+        System.out.println("");
+        for (Producto producto : productos) {
+            if (producto instanceof Dulce) {
+                System.out.println(producto.getNombre());
+            }
+        }
+
+        System.out.println("");
+        System.out.println("");
+        System.out.println("Total de ventas");
+        System.out.println("");
+        System.out.println("Ventas totales: Q" + total);
+        System.out.println("Comisión por ventas de Dulces: Q" + comision);
     }
 }
