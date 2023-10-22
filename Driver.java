@@ -109,12 +109,15 @@ public class Driver {
 
                 switch (categoria.toLowerCase()) { // Crear a los productos leidos en el CSV
                     case "Bebida":
+                        id = productos.size();
                         productos.add(new Bebida(id, nombre, cantidad_disponible, cantidad_vendidos, estado, precio, mililitros, tipo));
                         break;
                     case "Snack":
+                        id = productos.size();
                         productos.add(new Snack(id, nombre, cantidad_disponible, cantidad_vendidos, estado, precio, gramos, sabor, tamanio));
                         break;
                     case "Dulce":
+                        id = productos.size();
                         productos.add(new Dulce(id, nombre, cantidad_disponible, cantidad_vendidos, estado, precio, sabor, tamanio));
                         break;
                 }
@@ -142,6 +145,7 @@ public class Driver {
 
             switch (opcion) { // Opciones del menú
                 case 1: // Buscar un producto
+                    buscarProducto(scanner, productos);
                     break;
                 case 2: // Lista de productos
                     break;
@@ -151,9 +155,9 @@ public class Driver {
                 case 4: // Informe
                     System.out.println("// Lógica para la opción 4");
                     break;
-                case 5:
+                case 5: // Salir
                     salir = false;
-                    System.out.println("// Salir del bucle");
+                    System.out.println("Hasta pronto :)");
                     break;
                 case 0:
                     continue;
@@ -179,6 +183,34 @@ public class Driver {
         System.out.println("3: Ventas");
         System.out.println("4: Ver informe");
         System.out.println("5: Salir");
+        System.out.println("");
+    }
+
+    public static void buscarProducto(Scanner scanner, ArrayList<Producto> productos) {
+        int id = -1;
+        System.out.println("");
+        System.out.println("Ingrese el ID del producto que desee buscar");
+
+        try {
+            id = scanner.nextInt();
+            scanner.nextLine();
+
+            if (id <= productos.size() && id > 0) {
+                System.out.println(productos.get(id).toString());
+            }
+
+            else {
+                System.out.println("");
+                System.out.println("El ID ingresado no existe");
+            }
+        }
+
+        catch (InputMismatchException e) {
+            System.out.println("");
+            System.out.println("Ingrese un número.");
+            scanner.nextLine();
+        }
+
         System.out.println("");
     }
 }
