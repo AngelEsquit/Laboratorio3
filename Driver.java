@@ -42,7 +42,7 @@ public class Driver {
         float subtotal = 0;
         float total = 0;
         float porcentaje = 0;
-        float porcentajeComision = 20/100;
+        float porcentajeComision = (float) 0.2;
         Producto producto;
 
         // Variable para saltar la primera fila de encabezados
@@ -80,6 +80,7 @@ public class Driver {
                                 break;
                             case 5: // Precio
                                 precio = Float.parseFloat(datos);
+
                                 break;
                             case 6: // Categoría
                                 categoria = datos;
@@ -483,7 +484,9 @@ public class Driver {
                 totalProductosDulces += producto.getCantidad_disponible() + producto.getCantidad_vendidos();
             }
         }
-
+        
+        System.out.println("");
+        System.out.println("******************************************");
         System.out.println("");
         System.out.println("Listado de categorías con el total de productos");
         System.out.println("");
@@ -491,8 +494,9 @@ public class Driver {
         System.out.println("Snacks - " + totalProductosSnacks);
         System.out.println("Dulces - " + totalProductosDulces);
 
-
+        
         System.out.println("");
+        System.out.println("******************************************");
         System.out.println("");
         System.out.println("Listado de productos por categoría"); 
 
@@ -516,6 +520,7 @@ public class Driver {
         }
         
         System.out.println("");
+        System.out.println("******************************************");
         System.out.println("");
         System.out.println("Dulces");
         System.out.println("");
